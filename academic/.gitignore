@@ -73,3 +73,6 @@ academic/models/pretrained/
 ########################################
 academic/reports/figures/*
 academic/reports/tables/*
+
+*.mp4
+workup/
