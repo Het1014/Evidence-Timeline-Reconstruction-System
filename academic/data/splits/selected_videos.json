@@ -109,6 +109,28 @@
             "motion_score": 1.7864230871200562
         }
     ],
+    "Explosion": [
+        {
+            "video": "Explosion045_x264A.mp4",
+            "path": "data/raw/anomaly/Explosion/Explosion045_x264A.mp4",
+            "motion_score": 4.428934574127197
+        },
+        {
+            "video": "Explosion040_x264A.mp4",
+            "path": "data/raw/anomaly/Explosion/Explosion040_x264A.mp4",
+            "motion_score": 3.811635971069336
+        },
+        {
+            "video": "Explosion021_x264A.mp4",
+            "path": "data/raw/anomaly/Explosion/Explosion021_x264A.mp4",
+            "motion_score": 3.3868157863616943
+        },
+        {
+            "video": "Explosion008_x264A.mp4",
+            "path": "data/raw/anomaly/Explosion/Explosion008_x264A.mp4",
+            "motion_score": 3.142954111099243
+        }
+    ],
     "Fighting": [
         {
             "video": "Fighting020_x264.mp4",
