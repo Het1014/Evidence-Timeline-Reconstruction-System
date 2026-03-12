@@ -1,0 +1,174 @@
+academic =
+ucf-event-reconstruction/
+├── README.md
+├── requirements.txt
+├── environment.yml
+├── config.yaml
+├── logging.yaml
+├── docker-compose.yml
+├── Dockerfile
+├── Makefile
+├── data/
+│   ├── raw/anomaly/
+│   ├── raw/normal/
+│   ├── processed/frames/
+│   ├── processed/clips/
+│   ├── processed/features/
+│   ├── processed/tracks/
+│   ├── processed/annotations/
+│   └── splits/train.txt
+│   └── splits/val.txt
+│   └── splits/test.txt
+├── notebooks/
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_motion_analysis.ipynb
+│   ├── 03_event_visualization.ipynb
+│   └── 04_ablation_analysis.ipynb
+├── scripts/
+│   ├── run_preprocessing.sh
+│   ├── run_training.sh
+│   ├── run_evaluation.sh
+│   └── run_ablation.sh
+├── src/
+│   ├── preprocessing/frame_extractor.py
+│   ├── preprocessing/clip_generator.py
+│   ├── preprocessing/feature_extractor.py
+│   ├── preprocessing/track_serializer.py
+│   ├── preprocessing/dataset_builder.py
+│   ├── detection/yolo_detector.py
+│   ├── detection/tracking.py
+│   ├── detection/detection_utils.py
+│   ├── action/x3d_encoder.py
+│   ├── action/embedding_utils.py
+│   ├── action/temporal_pooling.py
+│   ├── modeling/transformer_model.py
+│   ├── modeling/lstm_model.py
+│   ├── modeling/loss_functions.py
+│   ├── modeling/optimizer.py
+│   ├── modeling/train.py
+│   ├── graph/rule_engine.py
+│   ├── graph/graph_builder.py
+│   ├── graph/graph_visualizer.py
+│   ├── graph/coherence_metrics.py
+│   ├── evaluation/temporal_metrics.py
+│   ├── evaluation/boundary_f1.py
+│   ├── evaluation/confusion_matrix.py
+│   ├── evaluation/robustness_tests.py
+│   ├── evaluation/report_generator.py
+│   ├── ablation/baseline_no_graph.py
+│   ├── ablation/no_tracking.py
+│   ├── ablation/no_action_features.py
+│   ├── ablation/lstm_variant.py
+│   ├── explainability/gradcam.py
+│   ├── explainability/attention_maps.py
+│   ├── explainability/saliency_maps.py
+│   └── utils/logger.py
+│   └── utils/config_loader.py
+│   └── utils/seed.py
+│   └── utils/file_manager.py
+│   └── utils/metrics_logger.py
+├── models/pretrained/
+├── models/checkpoints/
+├── models/exported/
+├── database/init.sql
+├── database/schema.sql
+├── database/db_utils.py
+├── api/app.py
+├── api/inference.py
+├── api/routes.py
+├── api/schemas.py
+├── streamlit_app/app.py
+├── streamlit_app/components.py
+├── streamlit_app/config.py
+├── reports/figures/
+├── reports/tables/
+└── tests/
+    ├── test_preprocessing.py
+    ├── test_detection.py
+    ├── test_action.py
+    ├── test_model.py
+    ├── test_graph.py
+    ├── test_evaluation.py
+    ├── test_ablation.py
+    └── test_integration.py
+
+production
+ucf-event-platform/
+├── README.md
+├── docker-compose.yml
+├── .env
+├── .gitignore
+├── Makefile
+├── frontend/
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── Dockerfile
+│   ├── .env
+│   └── src/
+│       ├── main.jsx
+│       ├── App.jsx
+│       ├── routes.jsx
+│       ├── api/api.js
+│       ├── pages/Login.jsx
+│       ├── pages/Dashboard.jsx
+│       ├── pages/Upload.jsx
+│       ├── pages/Results.jsx
+│       ├── components/Navbar.jsx
+│       ├── components/Timeline.jsx
+│       ├── components/GraphView.jsx
+│       ├── components/Loader.jsx
+│       ├── auth/googleAuth.js
+│       └── utils/tokenStorage.js
+├── backend/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── .env
+│   └── app/
+│       ├── main.py
+│       ├── config.py
+│       ├── database.py
+│       ├── logging_config.py
+│       ├── auth/oauth.py
+│       ├── auth/jwt_handler.py
+│       ├── auth/dependencies.py
+│       ├── auth/roles.py
+│       ├── routes/auth_routes.py
+│       ├── routes/video_routes.py
+│       ├── routes/results_routes.py
+│       ├── services/video_service.py
+│       ├── services/inference_service.py
+│       ├── services/graph_service.py
+│       ├── schemas/user_schema.py
+│       ├── schemas/video_schema.py
+│       ├── schemas/result_schema.py
+│       └── models/db_models.py
+├── ml_worker/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── worker.py
+│   ├── inference_pipeline.py
+│   ├── model_loader.py
+│   ├── config.py
+│   └── utils/gpu_utils.py
+├── celery/celery_app.py
+├── celery/tasks.py
+├── database/Dockerfile
+├── database/init.sql
+├── database/migrations.sql
+├── redis/redis.conf
+├── mlflow/mlflow_config.yaml
+├── mlflow/tracking_server.py
+├── dvc/dvc.yaml
+├── monitoring/prometheus.yml
+├── monitoring/grafana_dashboard.json
+├── logs/
+├── .github/workflows/backend_ci.yml
+├── .github/workflows/frontend_ci.yml
+├── .github/workflows/docker_build.yml
+└── tests/
+    ├── backend/test_auth.py
+    ├── backend/test_video_routes.py
+    ├── backend/test_results.py
+    ├── backend/test_permissions.py
+    ├── ml/test_inference.py
+    └── frontend/app.test.jsx
