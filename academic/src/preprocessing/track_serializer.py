@@ -2,6 +2,7 @@ import os
 import json
 from collections import defaultdict
 from tqdm import tqdm
+import numpy as np
 
 
 class TrackSerializer:
@@ -66,6 +67,60 @@ class TrackSerializer:
 
             self.serialize_video_tracks(video)
 
+
+def build_detection_features(video_name, tracks_dir="data/processed/tracks", clip_size=16):
+    """
+    Convert tracks.json → detections_per_clip
+
+    clip_size = number of frames per clip (must match your clip_generator)
+    """
+
+    track_file = os.path.join(tracks_dir, video_name, "tracks.json")
+
+    if not os.path.exists(track_file):
+        print(f"No tracks.json found for {video_name}")
+        return []
+
+    with open(track_file, "r") as f:
+        tracks = json.load(f)
+
+    # frame → list of track_ids
+    frame_map = defaultdict(list)
+
+    for track_id, track_data in tracks.items():
+
+        for entry in track_data:
+
+            frame_id = entry["frame"]
+            frame_map[frame_id].append(int(track_id))
+
+    if not frame_map:
+        return []
+    sorted_frames = sorted(frame_map.keys())
+    detections_per_clip = []
+    for i in range(0, len(sorted_frames), clip_size):
+        clip_frames = sorted_frames[i:i+clip_size]
+        frame_counts = []
+        for f in clip_frames:
+            frame_counts.append(len(frame_map[f]))
+        if len(frame_counts) == 0:
+            num_people = 0.0
+        else:
+            avg = np.mean(frame_counts)
+
+            # normalize relative to clip
+            max_count = max(frame_counts) + 1e-5
+            num_people = avg / max_count   # value between 0–1
+
+            # scale to useful range
+            num_people = num_people * 3
+
+        num_people = min(num_people, 6)
+        detections_per_clip.append({
+            "num_people": num_people,
+            "avg_conf": 0.8
+        })
+    return detections_per_clip
 
 if __name__ == "__main__":
 

@@ -7,7 +7,7 @@ from tqdm import tqdm
 class ClipGenerator:
 
     def __init__(self, frames_dir, tracks_dir, output_dir,
-                 clip_length=20, stride=10):
+                 clip_length=8, stride=4):
 
         self.frames_dir = frames_dir
         self.tracks_dir = tracks_dir
@@ -38,7 +38,7 @@ class ClipGenerator:
 
         clip_id = 0
 
-        for start in range(0, total_frames - self.clip_length, self.stride):
+        for start in range(0, total_frames - self.clip_length + 1, self.stride):
 
             end = start + self.clip_length
 

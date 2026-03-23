@@ -57,8 +57,8 @@ class FeatureDataset(Dataset):
             # Random anomaly window for anomaly videos
             if "Normal" not in video and "normal" not in video:
 
-                start = np.random.randint(int(num_clips * 0.4), int(num_clips * 0.7))
-                end = min(num_clips, start + int(num_clips * 0.3))
+                start = int(num_clips * 0.3)
+                end = int(num_clips * 0.8)
 
                 labels[start:end] = 1
 
@@ -145,7 +145,7 @@ def train():
 
     # ---------- CLASS WEIGHTING ---------- #
 
-    weights = torch.tensor([0.3, 0.7]).to(device)
+    weights = torch.tensor([0.7, 0.3]).to(device)
     criterion = nn.CrossEntropyLoss(weight=weights)
 
     optimizer = optim.Adam(model.parameters(), lr=LR)

@@ -3,6 +3,7 @@ import cv2
 import torch
 import numpy as np
 import random
+from scipy.ndimage import uniform_filter1d
 
 from src.modeling.transformer_model import TemporalTransformer
 
@@ -42,37 +43,38 @@ def run(video):
     feats = load_features(video).to(device)
 
     with torch.no_grad():
+        outputs = model(feats)
+        probs = torch.softmax(outputs, dim=-1)
 
+        scores = probs[0,:,1].cpu().numpy()
+
+        # smooth scores
+        scores = uniform_filter1d(scores, size=3)
+
+        preds = (scores > np.mean(scores)).astype(int)
         preds = torch.argmax(model(feats),dim=-1).cpu().numpy()[0]
 
     frame_dir = os.path.join(FRAMES_DIR, video)
 
     frames = sorted(os.listdir(frame_dir))
 
+    out_path = os.path.join(OUTPUT_DIR, f"{video}_prediction.mp4")
+    first_frame = cv2.imread(os.path.join(frame_dir, frames[0]))
+    h, w, _ = first_frame.shape
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    writer = cv2.VideoWriter(out_path, fourcc, 25, (w, h))
     for i,f in enumerate(frames):
-
-        out_path = os.path.join(OUTPUT_DIR, f"{video}_prediction.mp4")
-
-        first_frame = cv2.imread(os.path.join(frame_dir, frames[0]))
-        h, w, _ = first_frame.shape
-
-        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-        writer = cv2.VideoWriter(out_path, fourcc, 25, (w, h))
-
-        for i,f in enumerate(frames):
-
             frame = cv2.imread(os.path.join(frame_dir,f))
-
-            clip_index = min(i//16, len(preds)-1)
+            clip_length = 8
+            stride = 4
+            clip_index = max(0, min((i - clip_length//2) // stride, len(preds) - 1))
 
             label = preds[clip_index]
 
             text = "ANOMALY" if label==1 else "NORMAL"
             color = (0,0,255) if label==1 else (0,255,0)
 
-            cv2.putText(frame,text,(20,40),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        1,color,2)
+            cv2.putText(frame,text,(20,40),cv2.FONT_HERSHEY_SIMPLEX,1,color,2)
 
             writer.write(frame)
 
@@ -81,10 +83,9 @@ def run(video):
             if cv2.waitKey(20)==27:
                 break
 
-        writer.release()
-        cv2.destroyAllWindows()
-
-        print("Saved output video:", out_path)
+    writer.release()
+    cv2.destroyAllWindows()
+    print("Saved output video:", out_path)
 
 
 if __name__=="__main__":
